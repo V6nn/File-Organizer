@@ -3,7 +3,7 @@ import shutil
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
-from typing import Optional, Set, List, Tuple
+from typing import Set
 
 current_mode = "dark"  # define at module level
 last_moves = []  # to keep track of last moves
@@ -37,8 +37,8 @@ def organizer(directory: str) -> None:
                 log.write(f"Moved {filepath} -> {target_path}\n")
                 progress['value'] = idx + 1
                 root.update_idletasks()
-            except Exception as e:
-                messagebox.showerror("Error", f"Failed to move {filename}: {e}")
+            except Exception as E:
+                messagebox.showerror("Error", f"Failed to move {filename}: {E}")
                 continue
 
     # Restore original style based on current mode
@@ -48,11 +48,11 @@ def organizer(directory: str) -> None:
 def selected_folder() -> None:
     directory = filedialog.askdirectory(title="Select Folder to Organize")
     if directory:
-        get_excludes(directory)  # Get exclusions before organizing
+        get_excludes()  # Get exclusions before organizing
         organizer(directory)  # Always organize, regardless of exclude_list content
         messagebox.showinfo("Success", "Files Organized")
 
-def get_excludes(directory: str) -> None:
+def get_excludes() -> None:
     global exclude_list
     exclude_list.clear()  # Start with an empty exclude list
     exclude_str = simpledialog.askstring("Exclude",
@@ -79,8 +79,8 @@ def undo_last() -> None:
                 log.write(f"Undo: {src} -> {dest}\n")
                 parent_folder = os.path.dirname(src)  # Parent folder to check for removal
                 folders_to_check.add(parent_folder)
-            except Exception as e:
-                messagebox.showerror("Error", f"Failed to undo: {e}")
+            except Exception as E:
+                messagebox.showerror("Error", f"Failed to undo: {E}")
                 continue
 
         # Remove all created folders (including extension folders) if empty
@@ -97,8 +97,8 @@ def undo_last() -> None:
                             os.path.basename(extension_folder) != os.path.basename(os.path.dirname(src))):
                         os.rmdir(extension_folder)
                         log.write(f"Removed empty extension folder: {extension_folder}\n")
-            except Exception as e:
-                log.write(f"Failed to remove folder {folder}: {e}\n")
+            except Exception as E:
+                log.write(f"Failed to remove folder {folder}: {E}\n")
                 continue
 
     messagebox.showinfo("Undo", "Last organize undone.")
@@ -151,7 +151,7 @@ root.geometry("350x150")  # Slightly wider for theme button
 
 if os.name == 'nt':
     try:
-        root.iconbitmap('E:\\fuck yeah\FileOrganizer v2\\assets\\v2fst.ico')  # Replace with your icon path
+        root.iconbitmap('E:\\fuck yeah\\FileOrganizer v1.5\\assets\\v2fst.ico')
     except Exception as e:
         print(f"Could not load icon: {e}")
 
