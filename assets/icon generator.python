@@ -1,0 +1,7 @@
+# This code will generate a simple icon if you don't have one
+from PIL import Image, ImageDraw, ImageFont
+img = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
+draw = ImageDraw.Draw(img)
+draw.rectangle([10, 10, 54, 54], fill=(52, 152, 219))
+draw.rectangle([20, 20, 44, 44], fill=(255, 255, 255))
+img.save('file_organizer.png')
